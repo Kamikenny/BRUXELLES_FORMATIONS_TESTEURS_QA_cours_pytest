@@ -17,9 +17,11 @@ def loyalty_discount_percent(previous_orders):
     - 3 à 9 commandes       -> 5 %
     - 10 commandes ou plus  -> 10 %
     """
-    if previous_orders < 3:
+    if previous_orders < 0 or type(previous_orders) == float:
+        raise ValueError("Le nombre de commandes précédentes ne peut pas être négatif ni décimal")
+    if previous_orders < 3: # Il faut un fail safe pour les valeurs négatives
         return 0
-    elif previous_orders > 10:
+    elif previous_orders >= 10: # changé '>' en '>='
         return 10
     else:
         return 5
