@@ -75,18 +75,14 @@ items_test_dict = {
 @pytest.mark.parametrize(
     "value, expected", [("early_bird", 2495), ("standard", 3500), ("vip", 7500)]
 )
-def test_ticket_price(value, expected):
+def test_ticket_price_positives(value, expected):
     assert ticket_price(value) == expected
 
 
-def test_ticket_price_value_error_empty():
+@pytest.mark.parametrize("value", [(""), ("xyz")])
+def test_ticket_price_negatives(value):
     with pytest.raises(ValueError):
-        ticket_price("")
-
-
-def test_ticket_price_value_error_wrong():
-    with pytest.raises(ValueError):
-        ticket_price("xyz")
+        ticket_price(value)
 
 
 @pytest.mark.parametrize(
@@ -104,34 +100,37 @@ def test_line_total(category, quantity, expected):
     assert line_total(category, quantity) == expected
 
 
-def test_line_total_negative_value_error():
+def test_line_total_negative():
     with pytest.raises(ValueError):
         line_total("vip", -1)
 
 
-def test_apply_promo():
-    assert apply_promo(100, None) == 100
-    assert apply_promo(100, promo_codes_test_dict["valid"]) == 100 - (100 * 10 // 100)
+@pytest.mark.parametrize(
+    "base_total, promo_code, expected",
+    [(100, None, 100), (100, promo_codes_test_dict["valid"], 90)],
+)
+def test_apply_promo_positives(base_total, promo_code, expected):
+    assert apply_promo(base_total, promo_code) == expected
 
 
-def test_apply_promo_inactive():
-    with pytest.raises(ValueError, match=r"(?i).*inactif"):
-        apply_promo(100, promo_codes_test_dict["inactive"])
-
-
-def test_apply_promo_max_used():
-    with pytest.raises(ValueError, match=r"(?i).*épuisé"):
-        apply_promo(100, promo_codes_test_dict["max_used"])
-
-
-def test_apply_promo_low_percent():
-    with pytest.raises(ValueError, match=r"(?i).*invalide"):
-        apply_promo(100, promo_codes_test_dict["low_percent"])
-
-
-def test_apply_promo_high_percent():
-    with pytest.raises(ValueError, match=r"(?i).*invalide"):
-        apply_promo(100, promo_codes_test_dict["high_percent"])
+@pytest.mark.parametrize(
+    "base_total, promo_code, expected_match",
+    [
+        (100, promo_codes_test_dict["inactive"], r"(?i).*inactif"),
+        (100, promo_codes_test_dict["max_used"], r"(?i).*épuisé"),
+        (100, promo_codes_test_dict["low_percent"], r"(?i).*invalide"),
+        (100, promo_codes_test_dict["high_percent"], r"(?i).*invalide"),
+    ],
+    ids=[
+        "inactive_promo_code",
+        "max_used_promo_code",
+        "low_percent_promo_code",
+        "high_percent_promo_code",
+    ],
+)
+def test_apply_promo_negatives(base_total, promo_code, expected_match):
+    with pytest.raises(ValueError, match=expected_match):
+        apply_promo(base_total, promo_code)
 
 
 @pytest.mark.parametrize(

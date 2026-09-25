@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import pytest
 
 
@@ -198,3 +200,20 @@ def test_should_OVER_KILL(value, potential_match, error):
             pl_type_error(value)
     else:
         assert pl_type_error(value) == True
+
+
+# Mocks
+
+
+def send_creation_confirm(user, email_service, confirm):
+    if confirm:
+        result = email_service.send(user["name"])
+        return result["ok"]
+    return False
+
+
+def test_send_creation(get_user, get_confirm):
+    mock_email = Mock()
+    mock_email.send.return_value = {"ok": True}
+
+    assert send_creation_confirm(get_user, mock_email, get_confirm) is True
