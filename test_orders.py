@@ -15,6 +15,8 @@ Exercice 6 (mocks) : ensuite seulement, concevez la vraie suite des interactions
 de create_order avec ses dépendances (voir énoncé).
 """
 
+import pytest
+
 from unittest.mock import Mock
 
 from booking import create_order
@@ -27,4 +29,4 @@ email = Mock()
 
 
 def test_create_order_positive():
-    pass
+    create_order(event_mock())

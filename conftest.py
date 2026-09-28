@@ -17,8 +17,8 @@ def get_user():
 
 
 @pytest.fixture
-def event_1():
-    return {
+def event_1_mock():
+    yield {
         "id": 1,
         "title": "Nuit electro - Halles Saint-Gery",
         "description": "Une nuit electro au coeur de Bruxelles.",
@@ -47,3 +47,8 @@ def event_1():
         ],
         "available": 240,
     }
+
+
+@pytest.fixture
+def user_1_mock():
+    return {"id": 1, "active": True, "email": "user_1@test.test"}
