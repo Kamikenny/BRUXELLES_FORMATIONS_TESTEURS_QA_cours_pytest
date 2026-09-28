@@ -164,3 +164,47 @@ def yield_items_list_six_items():
         {"category": "standard", "quantity": 2},
         {"category": "vip", "quantity": 1},
     ]
+
+
+@pytest.fixture
+def yield_order_confirmed():
+    yield {
+        "id": 1,
+        "event_id": 1,
+        "event_title": "Title of the Event",
+        "event_city": "City of the Event",
+        "event_starts_at": "start of the Event",
+        "status": "confirmed",
+        "total_cents": 2495 + 3500 + 7500,
+        "created_at": "creation of the event",
+        "expires_at": "epiration of the event",
+        "items": [
+            {"category": "early_bird", "quantity": 1},
+            {"category": "standard", "quantity": 1},
+            {"category": "vip", "quantity": 1},
+        ],
+        "transaction_id": "t_id_ok",
+        "user_email": "user_1@test.be",
+    }
+
+
+@pytest.fixture
+def yield_order_not_confirmed():
+    yield {
+        "id": 1,
+        "event_id": 1,
+        "event_title": "Title of the Event",
+        "event_city": "City of the Event",
+        "event_starts_at": "start of the Event",
+        "status": "",
+        "total_cents": 2495 + 3500 + 7500,
+        "created_at": "creation of the event",
+        "expires_at": "epiration of the event",
+        "items": [
+            {"category": "early_bird", "quantity": 1},
+            {"category": "standard", "quantity": 1},
+            {"category": "vip", "quantity": 1},
+        ],
+        "transaction_id": "t_id_ok",
+        "user_email": "user_1@test.be",
+    }

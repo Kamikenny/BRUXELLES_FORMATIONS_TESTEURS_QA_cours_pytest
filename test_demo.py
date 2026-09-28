@@ -61,18 +61,19 @@ def test_my_div_zero_error():
 
 # msg_error_pif.py
 ERROR_WHILE_STRING = "La value ne peut pas être un string"
+ERROR_WHILE_BOOL = "La value ne peut pas être un booleen"
 
 
 def function_au_pif(value):
     if type(value) == str:
         raise ValueError(ERROR_WHILE_STRING)
     if type(value) == bool:
-        raise ValueError("La value ne peut pas être un bool")
+        raise ValueError(ERROR_WHILE_BOOL)
     return True
 
 
 def test_pif_str():
-    with pytest.raises(ValueError, match=ERROR_WHILE_STRING):
+    with pytest.raises(ValueError, match=ERROR_WHILE_BOOL):
         function_au_pif(True)
 
 
